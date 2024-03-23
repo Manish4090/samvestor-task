@@ -14,6 +14,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AdminSeeder::class);
         
-        //\App\Models\Post::factory(50)->create();
+        \App\Models\Post::factory(10)->create();
     }
 }

@@ -1,17 +1,26 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
+@section('content')
+ <div class="container">
+   <h1>My Jobs</h1>
+   
+  <div class="row">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
+ @if(!$posts->isEmpty()) 
+  @foreach($posts->sortByDesc('id') as $post) 
+    <div class="card col-md-4">
+      <div class="card-body">
+        <h4 class="card-title">{{ $post->title }}</h4> <!-- Accessing object properties using -> instead of [''] -->
+        <p class="card-text">{{ $post->description ? Str::limit($post->description, 100) : 'Not Available' }}</p> <!-- Using object properties and Str::limit -->
+        <p class="card-text">{{ $post->status == 1 ? 'Drafted' : 'Published' }}</p> <!-- Using object property -->
+      </div>
     </div>
-</x-app-layout>
+  @endforeach
+@else
+  <h3>No More Jobs</h3>
+@endif
+
+  
+ 
+  </div>
+</div>
+@endsection('content')
