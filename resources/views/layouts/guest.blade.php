@@ -19,8 +19,21 @@
         <link href="{{asset('flag-icon-css/css/flag-icon.min.css')}}" rel="stylesheet" type="text/css">
         <link href="{{asset('css/vendor.bundle.base.css')}}" rel="stylesheet" type="text/css">
         <link href="{{asset('main-css\style.css')}}" rel="stylesheet" type="text/css">
-         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
- 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <style type="text/css">
+            .navbar-nav {
+                display: flex;
+                align-items: center;
+                margin: 0;
+                padding: 0;
+            }
+
+            .navbar-nav li {
+                list-style: none;
+                margin: 0 10px; /* Adjust the spacing between list items */
+            }
+
+        </style>
     </head>
     <body class="font-sans antialiased">
        

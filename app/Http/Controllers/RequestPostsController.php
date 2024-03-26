@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Jobs\SendNewPostNotification;
+use Auth;
 
 class RequestPostsController extends Controller
 {
@@ -24,9 +25,10 @@ class RequestPostsController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
+       
 
         $post = Post::create(['title'=>$request->title, 'description'=>$request->description, 'users_id'=> \Auth::user()->id]);
-        SendNewPostNotification::dispatch($post)->delay(now()->addSeconds(30));
+        SendNewPostNotification::dispatch($post);
 
         return redirect()->route('user.applied-post')->with('success', 'Post successfully added!');
     }

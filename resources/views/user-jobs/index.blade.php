@@ -16,7 +16,7 @@
     <div class="card-body">
       <h4 class="card-title">{{$post['title']}}</h4>
       <p class="card-text">{{ $post['description'] ? Str::limit($post['description'], 100) : 'Not Available' }}</p>
-      <p class="card-text">{{($post['status'] == 1) ? 'Drafted' : 'Published'}}</p>
+      <p class="{{($post['status'] == 1) ? 'badge badge-danger' : 'badge badge-success'}}">{{($post['status'] == 1) ? 'Drafted' : 'Published'}}</p>
     </div>
   </div>
   @empty

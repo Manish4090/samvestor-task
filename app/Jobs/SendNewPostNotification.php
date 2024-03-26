@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 
 class SendNewPostNotification implements ShouldQueue
 {
@@ -25,8 +26,10 @@ class SendNewPostNotification implements ShouldQueue
         $adminEmail = 'nickykumar.1010@gmail.com';
 
         $subject = 'New Post Added';
-        $content = 'A new post titled "'.$this->post->title.'" has been added.';
 
+        $content = 'A new post titled "' . $this->post->title . '" has been added.';
+
+        // Send the email
         Mail::raw($content, function ($message) use ($adminEmail, $subject) {
             $message->to($adminEmail)->subject($subject);
         });

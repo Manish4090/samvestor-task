@@ -18,15 +18,13 @@ class AdminSeeder extends Seeder
     {
         $user = [
             'name'  => 'User',
-            'email' => 'user@user.com',
-            'password' => bcrypt('password')
+            'email' => 'nicky@mailinator.com',
+            'password' => bcrypt('123456789')
         ];
         User::create($user);
 
         $admin = [
-            ['name'  => 'Admin','email' => 'admin@admin.com','password' =>bcrypt('password')],
-            ['name'  => 'Editor','email' => 'editor@editor.com','password' =>bcrypt('password')],
-            ['name'  => 'Author','email' => 'author@author.com','password' =>bcrypt('password')],
+            ['name'  => 'Admin','email' => 'admin@mailinator.com','password' =>bcrypt('123456789')],
         ];
         Admin::insert($admin);
 

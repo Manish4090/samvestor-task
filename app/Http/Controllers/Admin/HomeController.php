@@ -10,13 +10,8 @@ use App\Helpers;
 class HomeController extends Controller
 {
     public function index()
-    {
-        
+    { 
         return view('admin.dashboard');
     }
-
-   
-
-    
 
 }
