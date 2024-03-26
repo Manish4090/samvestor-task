@@ -6,7 +6,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use DataTables;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Str;
+use App\Helpers;
 
 class PostController extends Controller
 {
@@ -18,37 +19,40 @@ class PostController extends Controller
 public function index(Request $request)
     {
         
-         if ($request->ajax()) {
+        if ($request->ajax()) {
             $data = Post::get();
             return DataTables::of($data)
                 ->addColumn('title', function ($row) {
-                    return $row->title ? $row->title : 'N/A';
+                    return $row->title ?: 'Not Provided';
                 })
                 ->addColumn('description', function ($row) {
-                    return $row->description ? $row->description : 'N/A';
+                    return $row->description ? Str::limit(ucfirst($row->description), 20) : 'Not Provided';
                 })
                 ->addColumn('status', function ($row) {
-                    return $row->status ? $row->status : 'N/A';
+                    if($row->status ==1){
+                        $status = 'Drafted';
+                        $claseName = 'badge badge-danger';
+                    }else{
+                        $status = 'Published';
+                        $claseName = 'badge badge-success';
+
+                    }
+
+                    return '<label class="'.$claseName.'">' . $status . '</label>';
                 })
                 ->addColumn('created_at', function ($row) {
-                    return $row->created_at ? $row->created_at : 'N/A';
+                    return date('M d, Y', strtotime($row->created_at));
                 })
-                
                 ->addColumn('action', function ($row) {
-                    $btn = '';
-                    // $url =  route('admin.user.destroy');
-                    // $btn .= '<a href=" ' . route('admin.user.show') .'/' .  \App\Helpers::encrypt($row->id) . ' " class="btn btn-primary btn-sm">View</a>';
-                    // if(\Auth::user()->role_type == 1){
-                    //     $btn .= '<a href="' . route('admin.user.edit', \App\Helpers::encrypt($row->id)) . '" class="btn btn-warning" title="Edit"><i class="mdi mdi-pencil"></i></a>
-                    //         <a onclick="deleteUersItems(this)" data-url ="'.$url.'" data-id="'.\App\Helpers::encrypt($row->id).'" class="btn btn-danger" title="Delete"><i class="mdi mdi-delete"></i></a>';
-                    // }        
+                    $btn = '<a href="' . route('admin.admin-edit-post', Helpers::encrypt($row->id)) . '" class="" title="Edit"><i class="icon-pencil"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'status'])
                 ->make(true);
         }
 
         return view('admin.posts.index');
+
 
     }
 
@@ -92,35 +96,14 @@ public function index(Request $request)
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
-    {
-        // if(\Auth::guard('admin')->user()->id == $post->admin_id){
-        //     return view('admin.posts.edit',['post'=>$post]);
-        // }
-
-        // if(\Auth::guard('admin')->user()->can('view',$post)){
-        //     return view('admin.posts.edit',['post'=>$post]);            
-        // }
-        
-        $this->authorize('view',$post);
-        return view('admin.posts.edit',['post'=>$post]);            
+    public function edit($id){
+        $post = Post::find( Helpers::decrypt($id));
+        return view('admin.posts.edit', compact('post'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Post $post)
-    {
-        $this->authorize('update',$post);
-        $post->update([
-            'title'=>$request->title,
-            'description'=>$request->description
-        ]);
-        return redirect()->back();
+    public function update(Request $request, $id) {
+        Post::where('id', $id)->update(['title' => $request->title, 'description' => $request->description, 'status' => $request->status]);
+         return redirect()->route('admin.posts')->with('success', 'Post successfully updated!');
     }
 
     /**

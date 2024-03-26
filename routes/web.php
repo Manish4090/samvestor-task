@@ -46,14 +46,9 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
 
         //Post Route
         Route::get('posts', [PostController::class, 'index'])->name('posts');
+        Route::get('admin-edit-post/{id?}',[PostController::class, 'edit'])->name('admin-edit-post');
+        Route::post('user-request-post-updated/{id?}', [PostController::class, 'update'])->name('admin.user-request-post-updated');
 
-
-        Route::get('admin-edit-post/{id?}',[HomeController::class, 'edit'])->name('admin-edit-post');
-        Route::post('user-request-post-updated/{id?}', [HomeController::class, 'update'])->name('admin.user-request-post-updated');
-
-        Route::get('editor-test',[HomeController::class, 'editorTest'])->name('editortest');
-
-        //Route::resource('posts','PostController');
 
     });
     Route::post('logout',[AuthenticatedSessionController::class, 'destroy'])->name('logout');
